@@ -118,7 +118,7 @@ It is still broken because npm script cannot find our entry file **server/index.
 
 Let's update our package.json
 
-replace dev an start scripts with these. I just prefixed the path with "src"
+replace dev and start scripts with these. I just prefixed the path with "src"
 
 ```json
     "dev": "cross-env NODE_ENV=development nodemon src/server/index.js --watch server",
@@ -167,7 +167,6 @@ The CLI will ask you some questions and here are the answers:
 
 ? Configure as a single-page app (rewrite all urls to /index.html)? (y/N)
 > N
-
 ```
 
 We will now edit the generated function. Open the functions/index.js file.
@@ -216,8 +215,121 @@ The function will need the same libraries as your nuxt app. Copy the package.jso
 
 At the time of writing this article, firebase supports node version 10. In functions/package.json you can update the node engine version from 8 to 10.
 
+Here's an example of the functions/package.json of a blank nuxt project
+
+```json
+{
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase serve --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "10"
+  },
+  "dependencies": {
+    "firebase-admin": "^8.0.0",
+    "firebase-functions": "^3.1.0",
+    "cross-env": "^5.2.0",
+    "nuxt": "^2.3.4",
+    "express": "^4.16.4",
+    "vuetify": "^1.3.14",
+    "vuetify-loader": "^1.0.8",
+    "@nuxtjs/pwa": "^2.6.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.12.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "firebase-functions-test": "^0.1.6"
+  },
+  "private": true
+}
+```
+
+Last file we need to edit is the **firebase.json** file.
+
+Replace the whole file with
+
+```json
+{
+  "hosting": {
+    "public": "public",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "**",
+        "function": "nuxtssr"
+      }
+    ]
+  }
+}
+```
+
+It will redirect all the requests to the function we've made
+
 > If you have difficulties running the project locally, you might need to install [NodeJs 10](https://nodejs.org/en/) on your computer.
 
 ## Automate all the things
+
+### Static files
+
+We didn't talk about the **public** directory yet.
+
+This directory will hold our generated nuxt app and static files.
+The nuxt app is the result of the _nuxt build_ command and our static files are the .jpeg, .png, .ico we stored into the _src/static_.
+
+### Step by step
+
+Here is what we need to do to get our app working again.
+
+1. Clean the directories in case there's already something in it
+2. Build the nuxt app
+3. The built app is now in the _functions_ directory then copy the content of the _functions/.nuxt/dist/_ directory to the _public/\_nuxt_ directory
+4. Copy the static files from the _src/static/_ directory to the root of the _public_ directory
+5. Install the _functions_ dependencies with yarn
+
+Of course there's scripts for that...
+Add these to the main package.json file.
+
+```json
+scripts: {
+    "build": "nuxt build",
+    "build:firebase": "yarn clean && yarn build && yarn copy && cd \"functions\" && yarn",
+
+    "clean": "yarn clean:public && yarn clean:functions && yarn clean:static",
+    "clean:functions": "rimraf \"functions/node_modules\" && rimraf \"functions/.nuxt\"",
+    "clean:public": "rimraf \"public/**/*.*!(md)\" && rimraf \"public/_nuxt\"",
+    "clean:static": "rimraf \"src/static/sw.js\"",
+
+    "copy": "yarn copy:nuxt && yarn copy:static",
+    "copy:nuxt": "xcopy \"functions\\.nuxt\\dist\\*\" \"public\\_nuxt\\\" /E /Y",
+    "copy:static": "xcopy \"src\\static\\*\" \"public\\\" /E /Y",
+
+    "start:firebase": "firebase serve --only functions,hosting",
+
+    "deploy": "firebase deploy --only functions,hosting"
+}
+```
+
+> Those scripts are written for Windows
+
+You can now launch these commands to start your firebase application:
+
+```bash
+yarn build:firebase
+yarn start:firebase
+```
+
+And to deploy:
+
+```bash
+yarn build:firebase
+yarn deploy
+```
 
 ## Conclusion
