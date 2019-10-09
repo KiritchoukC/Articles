@@ -1,14 +1,4 @@
-# How to host Nuxt on firebase
-
-## Table of contents
-
-1. Introduction
-2. Setup firebase
-3. Project Structure
-4. Update Nuxt config
-5. SSR function
-6. Automate all the things
-7. Conclusion
+# How to deploy Nuxt on firebase
 
 ## Introduction
 
@@ -16,15 +6,39 @@ I already have a working website using Nuxt and SSR so why would I move everythi
 
 > SSR stands for server side rendering, you can find more informations here [Understanding Server Side Rendering](https://dev.to/christopherkade/understanding-server-side-rendering-3lk5)
 
-Well, because:
+There's so many reasons !
+To list a few...
 
-- it is hosted on a VPS, it's way too much for my need and I could save a bit of money
-- The website is in a docker container. Docker is nice but it's an overkill for my website.
-- Updating the website/container is too slow, you'll see later that deploying on firebase is faster and easier.
-- I had to configure https myself with other docker containers. It is less secure
-- And many more...
+### Price
 
-If you want an easy way to build, update and scale your website then this article can get you running.
+Current solution: I have to pay every month for a private server
+Firebase: Well, for my needs, it's free.
+
+### Configuration
+
+Current solution: I have to configure everything myself. Docker containers, https, nginx reverse proxy, ...
+Firebase: Everything you need is already done. Logging, analytics, https, custom domain, ...
+
+### Update
+
+Current solution: A change in my website ? here's the steps
+
+- Push changes to git
+- Hook on docker hub get triggered and build the container (10-15 min)
+- Connect on server (1 min)
+- pull the latest container version (1 min)
+- find the right folder where the docker-compose.yaml is and update it (2 min)
+
+I know I could've automated things a bit more but still...
+
+Firebase: Steps
+
+- type **firebase deploy** in terminal (1-2 min)
+- done... changes are live
+
+### Conclusion
+
+I hope you're hooked ! If you want an easy way to build, update and scale your website then this article can get you running.
 
 ## Setup Firebase
 
