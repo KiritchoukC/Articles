@@ -66,13 +66,13 @@ Now with the help of NPM, we will install the firebase tools on our computer.
 
 Simply enter this command on your favorite terminal
 
-```bash
+```shell
 npm i -g firebase-tools
 ```
 
 Afterwards, you should be able to login with this command
 
-```bash
+```shell
 firebase login
 ```
 
@@ -131,11 +131,11 @@ module.exports = {
 }
 ```
 
-It is still broken because npm script cannot find our entry file **server/index.js**
+It is still broken because npm script cannot find our entry file _server/index.js_
 
 Let's update our package.json
 
-Replace _dev_ and _start_ scripts with these.
+Replace **dev** and **start** scripts with these.
 
 > I just prefixed the path with "src"
 
@@ -150,17 +150,17 @@ You should now be able to start your application by typing **yarn dev** or **npm
 
 ## Add Firebase to the project
 
-Like Git or NPM, Firebase CLI has its _init_ command to get everything you need quickly.
+Like Git or NPM, Firebase CLI has its **init** command to get everything you need quickly.
 
 Launch the command
 
-```bash
+```shell
 firebase init
 ```
 
 The CLI will ask you some questions and here are the answers:
 
-```bash
+```shell
 ? Are you ready to proceed?
 > Yes
 
@@ -236,11 +236,11 @@ To sum it up, on each reqest, the function will pass the response and request ob
 
 ### Updating the _function_ package.json
 
-The function will need the same libraries as your nuxt app. Copy the package.json dependencies to the functions/package.json dependencies
+The function will need the same libraries as your nuxt app. Copy the package.json dependencies to the _functions/package.json_ dependencies
 
-At the time of writing this article, firebase supports node version 10. In functions/package.json you can update the node engine version from 8 to 10.
+At the time of writing this article, firebase supports node version 10. In _functions/package.json_ you can update the node engine version from 8 to 10.
 
-Here's an example of the functions/package.json of a blank nuxt project
+Here's an example of the _functions/package.json_ of a blank nuxt project
 
 ```json
 {
@@ -327,7 +327,7 @@ Here is what we're going to automate with the scripts
 > ![public-folder](https://i.imgur.com/KGLldoM.png)
 
 These scripts will do all that for us. So kind of them.
-Add these to the main package.json file.
+Add these to the main _package.json_ file.
 
 ```json
 scripts: {
@@ -353,18 +353,24 @@ scripts: {
 
 ### Grand finale
 
-You can now launch these commands to start your firebase application:
+You can now launch these commands to **start** your application:
 
-```bash
+```shell
 yarn build:firebase
 yarn start:firebase
 ```
 
-And to deploy:
+And to **deploy**:
 
-```bash
+```shell
 yarn build:firebase
 yarn deploy
+```
+
+Tho, for **development**, you can still use
+
+```shell
+yarn dev
 ```
 
 ## Conclusion
