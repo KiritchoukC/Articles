@@ -11,17 +11,19 @@ To list a few...
 
 ### Price
 
-Current solution: I have to pay every month for a private server
-Firebase: Well, for my needs, it's free.
+**Current solution**: I have to pay every month for a private server
+
+**Firebase**: Well, for my needs, it's free.
 
 ### Configuration
 
-Current solution: I have to configure everything myself. Docker containers, https, nginx reverse proxy, ...
-Firebase: Everything you need is already done. Logging, analytics, https, custom domain, ...
+**Current solution**: I have to configure everything myself. Docker containers, https, nginx reverse proxy, ...
+
+**Firebase**: Everything you need is already done. Logging, analytics, https, custom domain, ...
 
 ### Update
 
-Current solution: A change in my website ? here's the steps
+**Current solution**: A change in my website ? here's the steps
 
 - Push changes to git
 - Hook on docker hub get triggered and build the container (10-15 min)
@@ -31,16 +33,14 @@ Current solution: A change in my website ? here's the steps
 
 I know I could've automated things a bit more but still...
 
-Firebase: Steps
+**Firebase**: Steps
 
-- type **firebase deploy** in terminal (1-2 min)
+- type _firebase deploy_ in terminal (1-2 min)
 - done... changes are live
 
-### Conclusion
+You're hooked ? Obviously you are. Let me help you get it running.
 
-I hope you're hooked ! If you want an easy way to build, update and scale your website then this article can get you running.
-
-## Setup Firebase
+## Setup the Firebase project
 
 ### Create your Firebase account
 
@@ -60,7 +60,7 @@ Click on **Continue**
 
 Wait for the project initialization and click on **continue**
 
-### Setup Firebase-tools
+### Install Firebase CLI
 
 Now with the help of NPM, we will install the firebase tools on our computer.
 
@@ -70,7 +70,7 @@ Simply enter this command on your favorite terminal
 npm i -g firebase-tools
 ```
 
-You should be able to login with this command
+Afterwards, you should be able to login with this command
 
 ```bash
 firebase login
@@ -78,21 +78,24 @@ firebase login
 
 A browser window will pop up and allow you to login with your google account
 
-Ok initial Firebase setup is done...
+Alright, initial Firebase setup is done...
 
-Before adding firebase to our project, we need to update our project structure
+Before adding firebase to our project, we need to update our application project structure
 
 ## Project Structure
 
-> I'm moving an existing Nuxt project but if you want to start fresh, head over to [Nuxt website](https://nuxtjs.org/guide/installation) to create a new app.
+> I'm supposing you already have a nuxt project.
+>
+> If not, head over to [Nuxt website](https://nuxtjs.org/guide/installation) to create a new app.
 
 Our project will be decomposed into 3 directories
 
 - **src** : This is where our development files sits
 - **functions** : This is where our SSR function will be
-- **public** : This directory will be used by Firebase hosting
+- **public** : This directory will hold the files that will be served by Firebase hosting
 
-**functions** and **public** directories will be generated automatically.
+We won't take care of the **functions** and **public** directories. It will be generated automatically.
+
 So create the **src** directory and move all the nuxt **directories** into it.
 Only the directories, leave the configuration files at the root
 
@@ -100,7 +103,7 @@ You should have something like the structure below
 
 ![folder-structure](https://i.imgur.com/stoa15K.png 'Folder structure')
 
-It's broken now ! Let's fix it by updating the nuxt config
+The app is broken now ! Let's fix it by updating the nuxt config
 
 ## Update Nuxt config
 
@@ -132,7 +135,9 @@ It is still broken because npm script cannot find our entry file **server/index.
 
 Let's update our package.json
 
-replace dev and start scripts with these. I just prefixed the path with "src"
+Replace _dev_ and _start_ scripts with these.
+
+> I just prefixed the path with "src"
 
 ```json
     "dev": "cross-env NODE_ENV=development nodemon src/server/index.js --watch server",
@@ -143,11 +148,11 @@ You should now be able to start your application by typing **yarn dev** or **npm
 
 > Notice that the functions directory has been created with the nuxt files in it.
 
-## Add Firebase
+## Add Firebase to the project
 
-Firebase has a simple command line for generating everything we need.
+Like Git or NPM, Firebase CLI has its _init_ command to get everything you need quickly.
 
-Start by typing
+Launch the command
 
 ```bash
 firebase init
@@ -183,9 +188,13 @@ The CLI will ask you some questions and here are the answers:
 > N
 ```
 
-We will now edit the generated function. Open the functions/index.js file.
+> A wild public directory appeared ! Our project structure is now complete.
 
-Remove everything and paste the code below
+We can now edit our function.
+
+## Implement SSR function
+
+Open the _functions/index.js_ file, remove everything and paste the code below
 
 ```javascript
 const functions = require('firebase-functions')
@@ -223,7 +232,9 @@ app.use(handleRequest)
 exports.nuxtssr = functions.https.onRequest(app)
 ```
 
-I won't go into the details but what the function does is on request, it will pass the response and request object to the _nuxt.render(req, res)_ function which will handle the app rendering.
+To sum it up, on each reqest, the function will pass the response and request object to the _nuxt.render(req, res)_ function which will handle the app rendering.
+
+### Updating the _function_ package.json
 
 The function will need the same libraries as your nuxt app. Copy the package.json dependencies to the functions/package.json dependencies
 
@@ -265,7 +276,7 @@ Here's an example of the functions/package.json of a blank nuxt project
 }
 ```
 
-Last file we need to edit is the **firebase.json** file.
+### Updating _firebase.json_
 
 Replace the whole file with
 
@@ -286,28 +297,36 @@ Replace the whole file with
 
 It will redirect all the requests to the function we've made
 
-> If you have difficulties running the project locally, you might need to install [NodeJs 10](https://nodejs.org/en/) on your computer.
+> Using a node version above 10 can cause some issues...
+> You can use **nvm** or directly install [NodeJs 10](https://nodejs.org/en/) on your computer.
 
 ## Automate all the things
 
 ### Static files
 
-We didn't talk about the **public** directory yet.
+We learned earlier that static files will be held by the _public_ directory. But what are the nuxt static files ?
 
-This directory will hold our generated nuxt app and static files.
-The nuxt app is the result of the _nuxt build_ command and our static files are the .jpeg, .png, .ico we stored into the _src/static_.
+There will be the nuxt app itself, the result of the **nuxt build** command.
+
+And the static files (.jpg, .ico, .png, ...) stored into the _src/static_ directory
+
+So we'll need to move them both in the _public_ directory, let's see how...
 
 ### Step by step
 
-Here is what we need to do to get our app working again.
+Here is what we're going to automate with the scripts
 
 1. Clean the directories in case there's already something in it
 2. Build the nuxt app
-3. The built app is now in the _functions_ directory then copy the content of the _functions/.nuxt/dist/_ directory to the _public/\_nuxt_ directory
+3. The built app is now in the _functions_ directory. Copy the content of the _functions/.nuxt/dist/_ directory to the _public/\_nuxt_ directory
 4. Copy the static files from the _src/static/_ directory to the root of the _public_ directory
 5. Install the _functions_ dependencies with yarn
 
-Of course there's scripts for that...
+> The public folder should look something like this
+>
+> ![public-folder](https://i.imgur.com/KGLldoM.png)
+
+These scripts will do all that for us. So kind of them.
 Add these to the main package.json file.
 
 ```json
@@ -330,7 +349,9 @@ scripts: {
 }
 ```
 
-> Those scripts are written for Windows
+> I'm using Windows, you might need to tweak the scripts a bit for other OS
+
+### Grand finale
 
 You can now launch these commands to start your firebase application:
 
@@ -347,3 +368,10 @@ yarn deploy
 ```
 
 ## Conclusion
+
+You now got a server rendered nuxt application on firebase... Easy huh ?
+
+For this article, I did an example with a blank nuxt app. Here's the final project [nuxt-on-firebase example repository](https://github.com/KiritchoukC/nuxt-on-firebase-example).
+
+PS: It was my first article ever, feel free to criticize. I'm here to learn.
+You spot an error ? Shame on me ! You can correct it by doing a pull request right here [nuxt-on-firebase repository](https://github.com/KiritchoukC/Articles/tree/master/deploy-nuxt-on-firebase)
