@@ -2,11 +2,11 @@
 
 ## Introduction
 
-I already have a working website using Nuxt and SSR so why would I move everything to Firebase ?
+I already have a working website using Nuxt and SSR so why would I move everything to Firebase?
 
-> SSR stands for server side rendering, you can find more informations here [Understanding Server Side Rendering](https://dev.to/christopherkade/understanding-server-side-rendering-3lk5)
+> SSR stands for server-side rendering, you can find more information here [Understanding Server Side Rendering](https://dev.to/christopherkade/understanding-server-side-rendering-3lk5)
 
-There's so many reasons !
+There are so many reasons!
 To list a few...
 
 ### Price
@@ -17,19 +17,19 @@ To list a few...
 
 ### Configuration
 
-**Current solution**: I have to configure everything myself. Docker containers, https, nginx reverse proxy, ...
+**Current solution**: I have to configure everything myself. Docker containers, https, Nginx reverse proxy, ...
 
 **Firebase**: Everything you need is already done. Logging, analytics, https, custom domain, ...
 
 ### Update
 
-**Current solution**: A change in my website ? here's the steps
+**Current solution**: A change in my website? here are the steps
 
 - Push changes to git
 - Hook on docker hub get triggered and build the container (10-15 min)
-- Connect on server (1 min)
-- pull the latest container version (1 min)
-- find the right folder where the docker-compose.yaml is and update it (2 min)
+- Connect on the server (1 min)
+- Pull the latest container version (1 min)
+- Find the right folder where the docker-compose.yaml is and update it (2 min)
 
 I know I could've automated things a bit more but still...
 
@@ -38,27 +38,27 @@ I know I could've automated things a bit more but still...
 - type _firebase deploy_ in terminal (1-2 min)
 - done... changes are live
 
-You're hooked ? Obviously you are. Let me help you get it running.
+You're hooked? Obviously, you are. Let me help you get it running.
 
 ## Setup the Firebase project
 
 ### Create your Firebase account
 
-You want to use Firebase ? Well you need to [create your account](https://firebase.google.com/) first.
+You want to use Firebase, don't you? Well, you need to [create your account](https://firebase.google.com/) first.
 
-Done ? We can now create a new project
+Done? We can now create a new project.
 
 ### Create a Firebase project
 
-Let's head over to [Firebase console](https://console.firebase.google.com/) and click on **Add project**
+Let's head over to [Firebase console](https://console.firebase.google.com/) and click on **Add project**.
 
-Set your **project name**
+Set your **project name**.
 
-Click on **Continue**
+Click on **Continue**.
 
-**Uncheck** Google analytics for now click on **Add Firebase**
+**Uncheck** Google analytics for now and click on **Add Firebase**.
 
-Wait for the project initialization and click on **continue**
+Wait for the project initialization and click on **continue**.
 
 ### Install Firebase CLI
 
@@ -70,29 +70,29 @@ Simply enter this command on your favorite terminal
 npm i -g firebase-tools
 ```
 
-Afterwards, you should be able to login with this command
+Afterward, you should be able to login with this command
 
 ```shell
 firebase login
 ```
 
-A browser window will pop up and allow you to login with your google account
+A browser window will pop up and allow you to login with your Google account.
 
-Alright, initial Firebase setup is done...
+Alright, the initial Firebase setup is done...
 
-Before adding firebase to our project, we need to update our application project structure
+Before adding firebase to our project, we need to update our application project structure...
 
 ## Project Structure
 
 > I'm supposing you already have a nuxt project.
 >
-> If not, head over to [Nuxt website](https://nuxtjs.org/guide/installation) to create a new app.
+> If not, head over to the [Nuxt website](https://nuxtjs.org/guide/installation) to create a new app.
 
 Our project will be decomposed into 3 directories
 
-- **src** : This is where our development files sits
-- **functions** : This is where our SSR function will be
-- **public** : This directory will hold the files that will be served by Firebase hosting
+- **src**: This is where our development files sit
+- **functions**: This is where our SSR function will be
+- **public**: This directory will hold the files that will be served by Firebase hosting
 
 We won't take care of the **functions** and **public** directories. It will be generated automatically.
 
@@ -103,7 +103,7 @@ You should have something like the structure below
 
 ![folder-structure](https://i.imgur.com/stoa15K.png 'Folder structure')
 
-The app is broken now ! Let's fix it by updating the nuxt config
+The app is broken now! Let's fix it by updating the nuxt config...
 
 ## Update Nuxt config
 
@@ -188,9 +188,9 @@ The CLI will ask you some questions and here are the answers:
 > N
 ```
 
-> A wild public directory appeared ! Our project structure is now complete.
+> A wild public directory appeared! Our project structure is now complete.
 
-We can now edit our function.
+We can now edit our function...
 
 ## Implement SSR function
 
@@ -304,7 +304,7 @@ It will redirect all the requests to the function we've made
 
 ### Static files
 
-We learned earlier that static files will be held by the _public_ directory. But what are the nuxt static files ?
+We learned earlier that static files will be held by the _public_ directory. But what are the nuxt static files?
 
 There will be the nuxt app itself, the result of the **nuxt build** command.
 
@@ -380,4 +380,4 @@ You now got a server rendered nuxt application on firebase... Easy huh ?
 For this article, I did an example with a blank nuxt app. Here's the final project [nuxt-on-firebase example repository](https://github.com/KiritchoukC/nuxt-on-firebase-example).
 
 PS: It was my first article ever, feel free to criticize. I'm here to learn.
-You spot an error ? Shame on me ! You can correct it by doing a pull request right here [nuxt-on-firebase repository](https://github.com/KiritchoukC/Articles/tree/master/deploy-nuxt-on-firebase)
+Did you spot an error? Shame on me! You can correct it by doing a pull request right here [nuxt-on-firebase repository](https://github.com/KiritchoukC/Articles/tree/master/deploy-nuxt-on-firebase)
