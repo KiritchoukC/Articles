@@ -375,7 +375,7 @@ yarn dev
 
 ## Conclusion
 
-You now got a server rendered nuxt application on firebase... Easy huh ?
+You now got a server-rendered nuxt application on firebase... Easy huh?
 
 For this article, I did an example with a blank nuxt app. Here's the final project [nuxt-on-firebase example repository](https://github.com/KiritchoukC/nuxt-on-firebase-example).
 
