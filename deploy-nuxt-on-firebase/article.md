@@ -1,4 +1,10 @@
-# How to deploy Nuxt on firebase
+---
+title: Deploy nuxt on Firebase
+published: true
+description: You want to deploy ssr vue app on firebase? This guide will help you just do this!
+tags: javascript, tutorial, vue, serverless
+cover_image: https://thepracticaldev.s3.amazonaws.com/i/3ev32y9n1rt9h32uemcj.jpg
+---
 
 ## Introduction
 
@@ -329,6 +335,8 @@ Here is what we're going to automate with the scripts
 These scripts will do all that for us. So kind of them.
 Add these to the main _package.json_ file.
 
+#### Windows version
+
 ```json
 scripts: {
     "build": "nuxt build",
@@ -349,7 +357,31 @@ scripts: {
 }
 ```
 
-> I'm using Windows, you might need to tweak the scripts a bit for other OS
+#### MacOs version
+
+> Thanks to [Michael Messerli](https://dev.to/messerli90) for his MacOs scripts version
+
+```json
+ "scripts": {
+    // ...
+    "build:firebase": "yarn clean && yarn build && yarn copy && cd functions && yarn",
+
+    "clean": "yarn clean:public && yarn clean:functions && yarn clean:static",
+    "clean:functions": "rimraf \"functions/node_modules\" && rimraf \"functions/.nuxt\"",
+    "clean:public": "rimraf \"public/**/*.*!(md)\" && rimraf \"public/_nuxt\"",
+    "clean:static": "rimraf \"src/static/sw.js\"",
+
+    "copy": "yarn copy:nuxt && yarn copy:static",
+    "copy:nuxt": "mkdir public/_nuxt && cp -r functions/.nuxt/dist/* public/_nuxt",
+    "copy:static": "cp -r src/static/* public",
+
+    "start:firebase": "firebase serve --only functions,hosting",
+
+    "deploy": "firebase deploy --only functions,hosting",
+
+    // ...
+  }
+```
 
 ### Grand finale
 
@@ -379,5 +411,4 @@ You now got a server-rendered nuxt application on firebase... Easy huh?
 
 For this article, I did an example with a blank nuxt app. Here's the final project [nuxt-on-firebase example repository](https://github.com/KiritchoukC/nuxt-on-firebase-example).
 
-PS: It was my first article ever, feel free to criticize. I'm here to learn.
 Did you spot an error? Shame on me! You can correct it by doing a pull request right here [nuxt-on-firebase repository](https://github.com/KiritchoukC/Articles/tree/master/deploy-nuxt-on-firebase)
