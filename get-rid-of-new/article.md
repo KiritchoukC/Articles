@@ -7,9 +7,9 @@ cover_image: https://dev-to-uploads.s3.amazonaws.com/i/6432nntahmac3hcx1tq8.png
 ---
 ## Why would I do that?
 
-I recenlty started a new personal project following the DDD approach.
+I recently started a new personal project following the DDD approach.
 
-If you striclty follow the DDD rules, you need to create a new class for each property.
+If you strictly follow the DDD rules, you need to create a new class for each property.
 And initializing those classes can quickly become a burden.
 
 Example:
@@ -76,7 +76,7 @@ var person = Person(
 
 ## Bonus
 
-Ok maybe you're not convinced yet.
+Ok, maybe you're not convinced yet.
 Let's create a list of persons
 
 ```csharp
@@ -107,7 +107,7 @@ You don't have to specify the type anymore because the type system infers it.
 
 ## Cons
 
-Well, there is some cons using this technique.
+Well, there are some cons using this technique.
 - You have to create a constructor for every type while `new` is built-in.
 - It's unusual, other developers might be confused looking at your code.
 
