@@ -27,7 +27,7 @@ There's a way to save a few keystrokes, increase readability and make chaining e
 
 _Disclaimer: This is my way of doing this, feel free to adapt or improvre_
 
-First, I create a static partial Constructors class like this:
+First, Create a static partial _Constructors_ class like this:
 ```csharp
 // Constructors.cs
 public static partial class Constructors
@@ -36,10 +36,10 @@ public static partial class Constructors
 }
 ```
 
-I use this class for System classes (DateTime, List, ...)
+I use this class for _System_ classes (DateTime, List, ...)
 I'll add some interesting ones later on...
 
-Then I Create another static partial Constructors class where I put all my Person constructors.
+Then create another static partial _Constructors_ class where I put all my _Person_ constructors.
 
 ```csharp
 // Constructors.Person.cs
@@ -59,7 +59,7 @@ And Done!
 
 ## How to use it
 
-It's refactoring time. Now we can initialize a Person class like this.
+It's refactoring time. Now we can initialize a _Person_ class like this.
 Actually, it's easy... Just drop the `new` keyword.
 
 **Don't forget the static using!**
@@ -86,7 +86,7 @@ var persons = new List<Person>{
   person3
 };
 ```
-Why not creating a constructor for initializing List ?
+Why not create a constructor for initializing _List_?
 Update your Constructors.cs file like this:
 
 ```csharp
